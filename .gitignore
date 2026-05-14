@@ -1,0 +1,68 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+out/
+dist/
+*.log
+
+# Electron builder artifacts
+*.exe
+*.dmg
+*.deb
+*.rpm
+*.zip
+*.tar.gz
+builder-debug.yml
+builder-effective-config.yaml
+
+# OS specific
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# Database
+*.json
+!package.json
+!tsconfig.json
+!vite.config.ts
+!electron-vite.config.ts
+
+# Prettier
+.prettierrc
+.prettierignore
+
+# ESLint
+.eslintrc
+.eslintignore
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+buid/
