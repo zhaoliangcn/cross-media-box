@@ -25,6 +25,12 @@ export function usePlayback() {
     }
   }
 
+  const openUrl = async (url: string) => {
+    if (!url.trim()) return
+    const trimmedUrl = url.trim()
+    await playQueueFromPaths([trimmedUrl], 0)
+  }
+
   const control = (action: string, value?: number) => {
     if (action !== 'seek') {
       window.electronAPI?.playback.control(action, value)
@@ -116,6 +122,7 @@ export function usePlayback() {
 
   return {
     openFile,
+    openUrl,
     control,
     stop,
     clearQueue: clearPlayQueue,

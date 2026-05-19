@@ -14,7 +14,7 @@ export default function PlayerPage() {
   const playQueue = usePlayerStore((s) => s.playQueue)
   const playlistPanelOpen = usePlayerStore((s) => s.playlistPanelOpen)
   const togglePlaylistPanel = usePlayerStore((s) => s.togglePlaylistPanel)
-  const { openFile } = usePlayback()
+  const { openFile, openUrl } = usePlayback()
   useKeyboardControls()
 
   const hasMedia = !!playbackState.currentFile
@@ -54,6 +54,7 @@ export default function PlayerPage() {
                   onPathsDropped={(paths) => {
                     void playQueueFromPaths(paths, 0)
                   }}
+                  onUrlOpen={openUrl}
                 />
                 {playQueue.length > 0 && (
                   <button

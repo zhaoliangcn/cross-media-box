@@ -3,10 +3,13 @@ import { useState, useCallback } from 'react'
 interface FileDropZoneProps {
   onFileOpen: () => void
   onPathsDropped: (paths: string[]) => void
+  onUrlOpen?: (url: string) => void
 }
 
-export default function FileDropZone({ onFileOpen, onPathsDropped }: FileDropZoneProps) {
+export default function FileDropZone({ onFileOpen, onPathsDropped, onUrlOpen }: FileDropZoneProps) {
   const [isDragOver, setIsDragOver] = useState(false)
+  const [showUrlInput, setShowUrlInput] = useState(false)
+  const [url, setUrl] = useState('')
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -33,6 +36,15 @@ export default function FileDropZone({ onFileOpen, onPathsDropped }: FileDropZon
     }
   }, [onPathsDropped])
 
+  const handleUrlSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (url.trim() && onUrlOpen) {
+      onUrlOpen(url.trim())
+      setUrl('')
+      setShowUrlInput(false)
+    }
+  }
+
   return (
     <div
       className={`w-full h-full flex flex-col items-center justify-center transition-colors ${
@@ -52,12 +64,41 @@ export default function FileDropZone({ onFileOpen, onPathsDropped }: FileDropZon
       </div>
       <h2 className="text-xl font-medium text-text-primary mb-2">打开媒体文件</h2>
       <p className="text-sm text-text-secondary mb-8">拖放单个或多个文件到此处，或点击下方按钮选择文件</p>
-      <button
-        onClick={onFileOpen}
-        className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-medium transition-colors cursor-pointer"
-      >
-        选择文件
-      </button>
+      <div className="flex gap-3">
+        <button
+          onClick={onFileOpen}
+          className="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white rounded-lg text-sm font-medium transition-colors cursor-pointer"
+        >
+          选择文件
+        </button>
+        {onUrlOpen && (
+          <button
+            onClick={() => setShowUrlInput(!showUrlInput)}
+            className="px-6 py-2.5 bg-surface-light hover:bg-surface-hover text-text-primary rounded-lg text-sm font-medium transition-colors cursor-pointer"
+          >
+            打开 URL
+          </button>
+        )}
+      </div>
+      {showUrlInput && (
+        <form onSubmit={handleUrlSubmit} className="mt-6 flex gap-2 w-80">
+          <input
+            type="text"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="输入视频 URL（http/https）"
+            className="flex-1 px-3 py-2 bg-surface-light text-text-primary text-sm rounded-lg border border-border outline-none focus:border-accent placeholder:text-text-muted"
+            autoFocus
+          />
+          <button
+            type="submit"
+            disabled={!url.trim()}
+            className="px-4 py-2 bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors cursor-pointer"
+          >
+            播放
+          </button>
+        </form>
+      )}
       <p className="text-xs text-text-muted mt-6">
         支持 MP4, MKV, AVI, MOV, FLV, WebM, MP3, FLAC, WAV 等格式
       </p>

@@ -106,10 +106,10 @@ class WindowManager {
       backgroundColor: '#0a0a0a',
       webPreferences: {
         preload: join(__dirname, '../preload/index.js'),
-        sandbox: true,
+        sandbox: false,
         contextIsolation: true,
         nodeIntegration: false,
-        webSecurity: true
+        webSecurity: false
       },
       icon: join(__dirname, '../../resources/icon.ico'),
       show: false

@@ -19,25 +19,38 @@ function resolveQueueIndexForCurrentFile(
 }
 
 export async function loadPathIntoPlayer(filePath: string): Promise<void> {
-  if (!window.electronAPI) return
-  const metadata = await window.electronAPI.playback.open(filePath)
-  const meta = metadata as {
-    fileName: string
-    duration: number
-    format: string
-    resolution?: string
+  const isUrl = filePath.startsWith('http://') || filePath.startsWith('https://')
+  const fileName = isUrl ? (filePath.split('/').pop() || filePath) : filePath
+  const ext = fileName.split('.').pop()?.toLowerCase() || ''
+
+  if (!isUrl && window.electronAPI) {
+    const metadata = await window.electronAPI.playback.open(filePath)
+    const meta = metadata as {
+      fileName: string
+      duration: number
+      format: string
+      resolution?: string
+    }
+    usePlayerStore.getState().setCurrentMetadata({
+      fileName: meta.fileName,
+      duration: 0,
+      format: meta.format,
+      resolution: meta.resolution
+    })
+  } else {
+    usePlayerStore.getState().setCurrentMetadata({
+      fileName,
+      duration: 0,
+      format: ext,
+      resolution: undefined
+    })
   }
+
   const { playQueue } = usePlayerStore.getState()
   const inQueue = playQueue.findIndex((q) => normalizeMediaPath(q) === normalizeMediaPath(filePath))
   if (inQueue !== -1) {
     usePlayerStore.getState().setCurrentQueueIndex(inQueue)
   }
-  usePlayerStore.getState().setCurrentMetadata({
-    fileName: meta.fileName,
-    duration: 0,
-    format: meta.format,
-    resolution: meta.resolution
-  })
   usePlayerStore.getState().setPlaybackState({
     ...usePlayerStore.getState().playbackState,
     currentFile: filePath,
