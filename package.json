@@ -82,18 +82,17 @@
         {
           "target": "dmg",
           "arch": [
-            "x64",
-            "arm64"
+            "x64"
           ]
         },
         {
           "target": "zip",
           "arch": [
-            "x64",
-            "arm64"
+            "x64"
           ]
         }
       ],
+      "icon": "build/icon.ico",
       "category": "public.app-category.video"
     },
     "linux": {
